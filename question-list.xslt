@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
   <xsl:variable name="table_column"><![CDATA[ & ]]></xsl:variable>
-  <xsl:variable name="table_row"><![CDATA[ \\{}]]></xsl:variable>
+  <xsl:variable name="table_row"><![CDATA[ \\]]></xsl:variable>
 
   <xsl:output method="text" indent="no"/>
   <xsl:template match="text()">
@@ -39,6 +39,8 @@
 \caption{List of questions in <xsl:value-of select="$authorName"/>, \emph{<xsl:value-of select="$textTitle"/>}.\hfill\enskip} \\
 \label{fig:question-list:Dinsdale}
 \endlastfoot
+
+
 <xsl:apply-templates select="//div[@id='body']"/>
 \end{longtabu}
   </xsl:template>
@@ -50,7 +52,9 @@
   <xsl:template match="head">
     <xsl:text>\multicolumn{3}{c}{\textbf{</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>}}\\&#xa;</xsl:text>
+    <xsl:text>}}</xsl:text>
+    <xsl:value-of select="$table_row"/>
+    <xsl:text>&#xa;</xsl:text>
   </xsl:template>
 
   <xsl:template match="item">
