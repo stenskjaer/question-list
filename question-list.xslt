@@ -66,12 +66,11 @@
     <xsl:value-of select="$questionNumber"/>
     <xsl:value-of select="$table_column"/>
     <xsl:choose>
-       <xsl:when test="title and not(questionTitle)">
+      <xsl:when test="title and (not(questionTitle) or (questionTitle = ''))">
         <xsl:value-of select="normalize-space(title)"/>
       </xsl:when>
-     <xsl:when test="questionTitle">
+      <xsl:when test="questionTitle">
         <xsl:value-of select="normalize-space(questionTitle)"/>
-        <xsl:value-of select="title"/>
       </xsl:when>
       <xsl:otherwise>No title or questionTitle provided</xsl:otherwise>
     </xsl:choose>
