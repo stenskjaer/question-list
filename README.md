@@ -11,6 +11,10 @@ appropriate headers and footers.
 For an example of what the output may look like,
 see [examples/output.pdf](examples/output.pdf).
 
+Note that this does not create a tex file that compiles on its own. It is
+designed to create output that can be included in an already existing tex
+document, so you will have to make your own preablem, `\begin{document}` etc.
+
 ## Installation
 
 To use the script, download or clone it and convert you XML-files with some XML
