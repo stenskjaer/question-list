@@ -2,8 +2,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
   <xsl:variable name="table_column"><![CDATA[ & ]]></xsl:variable>
   <xsl:variable name="table_row"><![CDATA[ \\]]></xsl:variable>
-
   <xsl:param name="include-folio-numbers">yes</xsl:param>
+  <xsl:param name="standalone-document">yes</xsl:param>
+  
   <xsl:output method="text" indent="no"/>
   <xsl:template match="text()">
     <xsl:value-of select="replace(., '\s+', ' ')"/>
@@ -18,7 +19,16 @@
   <xsl:variable name="textTitle" select="/listofFileNames/header/commentaryName"/>
 
   <xsl:template match="/">
-% NOTE: This requires the following packages enabled in the preamble:
+    <xsl:if test="$standalone-document = 'yes'">
+    \documentclass[a4paper]{article}
+    
+    \usepackage{libertine}
+    \usepackage{tabu, longtable, booktabs}
+    
+    \begin{document}
+    </xsl:if>
+    
+    % NOTE: This requires the following packages enabled in the preamble:
 % \usepackage{tabu, longtable, booktabs}
 \tabulinesep=1.5mm
 <xsl:choose>
@@ -67,6 +77,9 @@
   </xsl:choose>
 <xsl:apply-templates select="//div[@id='body']"/>
 \end{longtabu}
+<xsl:if test="$standalone-document">
+  \end{document}
+</xsl:if>
   </xsl:template>
 
   <xsl:template match="//header">
