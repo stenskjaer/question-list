@@ -3,6 +3,7 @@
   <xsl:variable name="table_column"><![CDATA[ & ]]></xsl:variable>
   <xsl:variable name="table_row"><![CDATA[ \\]]></xsl:variable>
 
+  <xsl:param name="include-folio-numbers">yes</xsl:param>
   <xsl:output method="text" indent="no"/>
   <xsl:template match="text()">
     <xsl:value-of select="replace(., '\s+', ' ')"/>
@@ -20,27 +21,50 @@
 % NOTE: This requires the following packages enabled in the preamble:
 % \usepackage{tabu, longtable, booktabs}
 \tabulinesep=1.5mm
-\begin{longtabu} to \textwidth {X[0.5,l] X[5,l] X[1.5,l]}
-
-\toprule
-\textbf{No.} <xsl:value-of select="$table_column"/> \textbf{Title} <xsl:value-of select="$table_column"/> \textbf{Witnesses} \\ \midrule
-\endfirsthead
-
-\multicolumn{3}{c}{{\tablename} \thetable{} -- continued} \\
-\toprule
-\textbf{No.} <xsl:value-of select="$table_column"/> \textbf{Title} <xsl:value-of select="$table_column"/> \textbf{Witnesses} \\ \midrule
-\endhead
-
-\midrule
-\caption{List of questions in <xsl:value-of select="$authorName"/>, \emph{<xsl:value-of select="$textTitle"/>}.\hfill\enskip} \\
-\endfoot
-
-\bottomrule
-\caption{List of questions in <xsl:value-of select="$authorName"/>, \emph{<xsl:value-of select="$textTitle"/>}.\hfill\enskip} \\
-\label{fig:question-list:Dinsdale}
-\endlastfoot
-
-
+<xsl:choose>
+  <xsl:when test="$include-folio-numbers = 'yes'">
+    \begin{longtabu} to \textwidth {X[0.5,l] X[5,l] X[1.5,l]}
+    
+    \toprule
+    \textbf{No.} <xsl:value-of select="$table_column"/> \textbf{Title} <xsl:value-of select="$table_column"/> \textbf{Witnesses} \\ \midrule
+    \endfirsthead
+    
+    \multicolumn{3}{c}{{\tablename} \thetable{} -- continued} \\
+    \toprule
+    \textbf{No.} <xsl:value-of select="$table_column"/> \textbf{Title} <xsl:value-of select="$table_column"/> \textbf{Witnesses} \\ \midrule
+    \endhead
+    
+    \midrule
+    \caption{List of questions in <xsl:value-of select="$authorName"/>, \emph{<xsl:value-of select="$textTitle"/>}.\hfill\enskip} \\
+    \endfoot
+    
+    \bottomrule
+    \caption{List of questions in <xsl:value-of select="$authorName"/>, \emph{<xsl:value-of select="$textTitle"/>}.\hfill\enskip} \\
+    \label{fig:question-list:Dinsdale}
+    \endlastfoot
+  </xsl:when>
+  <xsl:otherwise>
+    \begin{longtabu} to \textwidth {X[0.5,l] X[5,l]}
+    
+    \toprule
+    \textbf{No.} <xsl:value-of select="$table_column"/> \textbf{Title} \\ \midrule
+    \endfirsthead
+    
+    \multicolumn{2}{c}{{\tablename} \thetable{} -- continued} \\
+    \toprule
+    \textbf{No.} <xsl:value-of select="$table_column"/> \textbf{Title} \\ \midrule
+    \endhead
+    
+    \midrule
+    \caption{List of questions in <xsl:value-of select="$authorName"/>, \emph{<xsl:value-of select="$textTitle"/>}.\hfill\enskip} \\
+    \endfoot
+    
+    \bottomrule
+    \caption{List of questions in <xsl:value-of select="$authorName"/>, \emph{<xsl:value-of select="$textTitle"/>}.\hfill\enskip} \\
+    \label{fig:question-list:Dinsdale}
+    \endlastfoot
+    </xsl:otherwise>
+  </xsl:choose>
 <xsl:apply-templates select="//div[@id='body']"/>
 \end{longtabu}
   </xsl:template>
@@ -50,7 +74,14 @@
   </xsl:template>
 
   <xsl:template match="head">
-    <xsl:text>\multicolumn{3}{c}{\textbf{</xsl:text>
+    <xsl:choose>
+      <xsl:when test="$include-folio-numbers = 'yes'">
+        <xsl:text>\multicolumn{3}{c}{\textbf{</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>\multicolumn{2}{c}{\textbf{</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates />
     <xsl:text>}}</xsl:text>
     <xsl:value-of select="$table_row"/>
@@ -82,8 +113,10 @@
       </xsl:when>
       <xsl:otherwise>No title or questionTitle provided</xsl:otherwise>
     </xsl:choose>
-    <xsl:value-of select="$table_column"/>
-    <xsl:call-template name="getWitnesses" />
+    <xsl:if test="$include-folio-numbers = 'yes'">
+      <xsl:value-of select="$table_column"/>
+      <xsl:call-template name="getWitnesses" />
+    </xsl:if>
     <xsl:value-of select="$table_row"/>
     <xsl:text>&#xa;</xsl:text>
   </xsl:template>
