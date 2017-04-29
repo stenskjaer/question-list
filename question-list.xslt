@@ -60,21 +60,25 @@
   <xsl:template match="item">
     <xsl:variable name="itemTokenizedID" select="tokenize(fileName/@filestem, '-')"/>
     <xsl:variable name="itemStructureNumber" select="$itemTokenizedID[3]"/>
-    <xsl:variable name="questionNumber">
-      <xsl:if test="contains($itemStructureNumber, 'q') and contains($itemStructureNumber, 'l')">
-        <xsl:number value="substring-after(substring-before($itemStructureNumber, 'q'), 'l')" format="I"/>
-        <xsl:text>.</xsl:text>
-        <xsl:value-of select="substring-after($itemStructureNumber, 'q')"/>
+    <xsl:variable name="structure-number">
+      <!-- If title contains number -->
+      <xsl:if test="translate(title, '1234567890', '') != title">
+        <!-- If title contains comma -->
+        <xsl:if test="translate(title, ',', '') != title">
+          <xsl:number value="translate(substring-before(title, ','), translate(substring-before(title, ','), '1234567890', ''), '')"  format="I"/>
+          <xsl:text>.</xsl:text>
+        </xsl:if>
+        <xsl:number value="translate(substring-after(title, ','), translate(substring-after(title, ','), '1234567890', ''), '')"/>
       </xsl:if>
     </xsl:variable>
-    <xsl:value-of select="$questionNumber"/>
+    <xsl:value-of select="$structure-number"/>
     <xsl:value-of select="$table_column"/>
     <xsl:choose>
-      <xsl:when test="title and (not(questionTitle) or (questionTitle = ''))">
+      <xsl:when test="title and not(question-title or question-title = '')">
         <xsl:value-of select="normalize-space(title)"/>
       </xsl:when>
-      <xsl:when test="questionTitle">
-        <xsl:value-of select="normalize-space(questionTitle)"/>
+      <xsl:when test="question-title">
+        <xsl:value-of select="normalize-space(question-title)"/>
       </xsl:when>
       <xsl:otherwise>No title or questionTitle provided</xsl:otherwise>
     </xsl:choose>
