@@ -82,6 +82,12 @@
 </xsl:if>
   </xsl:template>
 
+  <xsl:template match="unclear">
+    <xsl:text>\emph{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text> [?]}</xsl:text>
+  </xsl:template>
+
   <xsl:template match="//header">
     <xsl:apply-templates/>
   </xsl:template>
@@ -119,10 +125,10 @@
     <xsl:value-of select="$table_column"/>
     <xsl:choose>
       <xsl:when test="title and not(question-title or question-title = '')">
-        <xsl:value-of select="normalize-space(title)"/>
+        <xsl:apply-templates select="title"/>
       </xsl:when>
       <xsl:when test="question-title">
-        <xsl:value-of select="normalize-space(question-title)"/>
+        <xsl:apply-templates select="question-title"/>
       </xsl:when>
       <xsl:otherwise>No title or questionTitle provided</xsl:otherwise>
     </xsl:choose>
