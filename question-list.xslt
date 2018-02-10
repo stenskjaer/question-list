@@ -88,6 +88,12 @@
     <xsl:text> [?]}</xsl:text>
   </xsl:template>
 
+  <xsl:template match="supplied">
+    <xsl:text>&lt;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&gt;</xsl:text>
+  </xsl:template>
+
   <xsl:template match="//header">
     <xsl:apply-templates/>
   </xsl:template>
