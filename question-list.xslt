@@ -124,11 +124,11 @@
     <xsl:value-of select="$structure-number"/>
     <xsl:value-of select="$table_column"/>
     <xsl:choose>
-      <xsl:when test="title and not(question-title or question-title = '')">
+      <xsl:when test="title and not(questionTitle or questionTitle = '')">
         <xsl:apply-templates select="title"/>
       </xsl:when>
-      <xsl:when test="question-title">
-        <xsl:apply-templates select="question-title"/>
+      <xsl:when test="questionTitle">
+        <xsl:apply-templates select="questionTitle"/>
       </xsl:when>
       <xsl:otherwise>No title or questionTitle provided</xsl:otherwise>
     </xsl:choose>
@@ -144,6 +144,7 @@
     <xsl:param name="context" select="hasWitnesses"/>
     <xsl:for-each  select="$context/witness">
       <xsl:value-of select="translate(@ref, '#', '')"/>
+      <xsl:text> </xsl:text>
       <xsl:choose>
         <xsl:when test="count(folio) &gt; 1">
           <!-- More than one folio -->
