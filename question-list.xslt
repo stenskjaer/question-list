@@ -77,7 +77,7 @@
   </xsl:choose>
 <xsl:apply-templates select="//div[@id='body']"/>
 \end{longtabu}
-<xsl:if test="$standalone-document">
+<xsl:if test="$standalone-document='yes'">
   \end{document}
 </xsl:if>
   </xsl:template>
